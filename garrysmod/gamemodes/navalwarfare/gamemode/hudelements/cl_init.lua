@@ -111,8 +111,8 @@ function GM:HUDPaint()
 			["Y"]			= HudElementDefaults["DefaultLowY"]
 		}
 		mainHudElements = {
-			["outerCircle"] = getArc(40,scrHeight-40,100,32,math.pi*0.9,math.pi*1.465),
-			["innerCircle"] = getArc(40,scrHeight-40,90,32,math.pi*0.96,math.pi*1.495),
+			["outerCircle"] = getArc(40,scrHeight-40,100,0,math.pi*0.9,math.pi*1.465),
+			["innerCircle"] = getArc(40,scrHeight-40,90,0,math.pi*0.96,math.pi*1.495),
 			
 			["outerSquare"] = {
 				{
@@ -450,6 +450,13 @@ function GM:HUDPaint()
 			["BoxWidth"] 	= mainHudElements["BoxWidth"],
 			["BoxHeight"] 	= 50
 		}
+		zoneTimeUp= { 
+			[0] =      	10,
+			[1] =      	10,
+			[2] =      	10,
+			[3] =      	-1,
+			[4] = 		10	
+		}
 	end
 	self:PaintWorldTips()
 	DoHUDDecisions()
@@ -512,7 +519,7 @@ function DoHUDDecisions()
 		shouldDrawPlugs = LocalPlayer():GetNWBool("shouldDrawPlugs")
 		--Stamina--
 		if(adminMode) then
-			DrawAdminBox()
+			--DrawAdminBox()
 		else
 			if(ply:WaterLevel() >= 1 || stamina!=100) then
 				if transitionStamina < 1 then

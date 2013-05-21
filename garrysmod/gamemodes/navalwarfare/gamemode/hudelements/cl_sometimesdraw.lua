@@ -61,7 +61,7 @@ function DrawAmmoCounter(clip, total)
 		end
 		transA = 0
 	end
-		
+	surface.SetTexture(0)
 	surface.SetDrawColor(teamCol2)
 	surface.DrawPoly(mainHudElements["outerCircle"])
 	surface.SetDrawColor(teamCol)
