@@ -1,0 +1,3 @@
+To install just copy all these folders into the garrysmod root directory (yourname/garrysmod/garrysmod)
+
+Some extra files are included that are not nessisary to run the server, but recommended. Do with that what you will.
