@@ -83,7 +83,7 @@ function DrawCreditCounter()
 end
 
 function DrawTextLocation()
-	if LocalPlayer():Team()!=1 and LocalPlayer():Team()!=2 or LocalPlayer():Team()!=3 or LocalPlayer():Team()!=6 then return end
+	if LocalPlayer():Team()!=1 and LocalPlayer():Team()!=2 and LocalPlayer():Team()!=3 and LocalPlayer():Team()!=6 then return end
 	local str = zoneTable[zone]
 	local width = zoneWidths[zone]
 	local TColor = Color( 0, 0, 0, 150 )
