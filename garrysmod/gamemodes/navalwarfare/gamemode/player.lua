@@ -682,6 +682,7 @@ function toggleAdminMode(ply)
 		else
 			ply:SetTeam(ply.HoldTeam)
 		end
+		ply.Zone = nil
 		ColorizePlayer(ply, _, _)
 
 		ply:SetNWBool("adminmode", ply.adminMode)
