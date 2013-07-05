@@ -62,7 +62,7 @@ hook.Add( "Initialize", "navalwarfare_zonesinit", Init_Vars );
 local checkZones = 0
 local function PlayerMove()
 	local players = player.GetAll()
-	if checkZones > 100 then
+	if checkZones > 30 then
 		for k,ply in pairs(players) do
 			
 			local plyPos = ply:GetPos()

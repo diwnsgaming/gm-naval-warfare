@@ -10,12 +10,15 @@ local CHARGELOOP = Sound("weapons/gauss/chargeloop.wav")
 function ENT:SpawnFunction( ply, tr )
 	if ( !tr.Hit ) then return end
 	local SpawnPos = tr.HitPos + tr.HitNormal * 1 + Vector( 0, 0, 20)
-	local ent = ents.Create( "harbor_lasercannon" )
+	local ent = ents.Create( "harbor_cannon" )
 	ent:SetPos( SpawnPos )
 	ent:Spawn()
 	ent:Activate()
 	return ent
 end
+
+
+
 
 function ENT:Initialize()
 	self:SetModel("models/props_trainstation/trashcan_indoor001b.mdl")
@@ -31,10 +34,10 @@ function ENT:Initialize()
 	
 	SOUND = CreateSound(self, CHARGELOOP)
 	
-	self.Energy = 1000
-	self.MaxEnergy = 1000
+	self.Energy = 50
+	self.MaxEnergy = 50
 	self.Capacitor = 0
-	self.MaxCapacitor = 100
+	self.MaxCapacitor = 1
 	
 	self.IsFireing = false
 	self.FirstFire = false
@@ -43,9 +46,9 @@ function ENT:Initialize()
 	self.Inputs = Wire_CreateInputs( self.Entity, { "Fire" } )
 	self.Outputs = WireLib.CreateSpecialOutputs( self.Entity, { "Ready", "Capacitor", "Energy" }, { "NORMAL" , "NORMAL" , "NORMAL" } )
 	Wire_TriggerOutput(self.Entity, "Entity", self.Entity)
-	self.WireDebugName = "Heavy Cannon"
+	self.WireDebugName = "Cannon"
 	
-	self.cost = 1500
+	self.cost = 500
 end
 
 local function FireRound(self)
@@ -64,21 +67,15 @@ local function FireRound(self)
 	local pos = self:GetPos() + self:GetUp()*100
 	local ang = self:GetAngles()
 	
-	local tracedata = {}
-	tracedata.start = pos
-	tracedata.endpos = pos + (self:GetUp()*5000)
-	tracedata.filter = self
-	
-	local trace = util.TraceLine(tracedata)
-	if trace.Hit then
-		trace.Entity:TakeDamage( 40, trace.Entity.FPPOwner, self )
-		local mult = (5000-(trace.HitPos:Distance(self:GetPos())))*75
-		print(mult)
-		trace.Entity:GetPhysicsObject( ):ApplyForceOffset(self:GetUp()*mult, trace.HitPos)
-	end
+	proj = ents.Create("harbor_projectile")
+	proj:SetPos(pos)
+	proj:Spawn()
+	proj:GetPhysicsObject():AddVelocity(self:GetUp()*4000)
+	self.Energy = self.Energy - 1
+	self.Capacitor = 0
 	if self.Capacitor < 0 then
 		self.Capacitor = 0
-		self:SetOverlayText("Laser Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
+		self:SetOverlayText("Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
 	end
 end
 
@@ -95,17 +92,23 @@ function ENT:Use( activator, caller )
 end
 
 function ENT:Think()
+	if(self.Capacitor< 0.1) then
+		self.Capacitor = 0
+	end
+	if(self.Energy > self.MaxEnergy) then
+		self.Energy = self.MaxEnergy
+	end
 	if SOUND == nil then SOUND = CreateSound(self, CHARGELOOP) end
 	if SOUND == nil then return false end
-	self:SetOverlayText("Laser Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
+	self:SetOverlayText("Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
 	if self.Energy <= 0 and self.Capacitor < 1 then
-		self:SetOverlayText("Laser Cannon \n NO ENERGY REMAINING \n RETURN TO HARBOR TO RE-ENERGIZE")
+		self:SetOverlayText("Cannon \n NO ENERGY REMAINING \n RETURN TO HARBOR TO RE-ENERGIZE")
 	elseif self.IsCharging and self.Energy > 0 then
 		if self.Capacitor < self.MaxCapacitor then
-			self.Capacitor = self.Capacitor + 5
-			self.Energy = self.Energy -5
+			self.Capacitor = self.Capacitor + 0.1
+			self.Energy = self.Energy -0.1
 			self.FirstFire = false
-			self:SetOverlayText("Laser Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
+			self:SetOverlayText("Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
 		else
 			self.IsCharging = false
 			FireRound(self)
@@ -120,8 +123,9 @@ function ENT:Think()
 	if self.IsFireing then
 		if self.Capacitor > 1 then
 			FireRound(self)
-			self.Capacitor = self.Capacitor - 10
-			self:SetOverlayText("Laser Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
+			self.Capacitor = self.Capacitor - 1
+			self.Energy = math.Round(self.Energy)
+			self:SetOverlayText("Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n ENERGY: "..self.Energy)
 		else
 			self.IsFireing = false
 			self:SetNWBool("fire", false)
@@ -133,7 +137,7 @@ function ENT:Think()
 		if self.FPPOwner:IsValid() and self.FPPOwner:Team() == TEAM_USA then
 			if self.Energy < self.MaxEnergy then
 				self.Energy = self.Energy + 1
-				self:SetOverlayText("Laser Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n RECHARGING("..self.Energy..")")
+				self:SetOverlayText("Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n RECHARGING("..self.Energy..")")
 			end
 		end
 	elseif plyPos:Distance(USSRPos) < HarborRadius or
@@ -141,7 +145,7 @@ function ENT:Think()
 		if self.FPPOwner:IsValid() and self.FPPOwner:Team() == TEAM_USSR then
 			if self.Energy < self.MaxEnergy then
 				self.Energy = self.Energy + 1
-				self:SetOverlayText("Laser Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n RECHARGING("..self.Energy..")")
+				self:SetOverlayText("Cannon \n ReloadSpeed: 25 \n Damage: 1000".."\n Capacitor: "..self.Capacitor.."\n RECHARGING("..self.Energy..")")
 			end
 		end
 	end

@@ -28,7 +28,7 @@ AddCSLuaFile( "cl_scoreboard.lua" )
 AddCSLuaFile( "cl_captureisland.lua" )
 AddCSLuaFile( "cl_capturerig.lua" )
 
-include( 'von.lua' )
+include( 'von.lua')
 include( 'hudelements/init.lua' )
 include( 'consoleCommands.lua' )
 include( 'download.lua' )

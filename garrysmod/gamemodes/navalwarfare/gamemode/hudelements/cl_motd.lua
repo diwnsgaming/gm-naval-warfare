@@ -115,6 +115,9 @@ function DrawMOTD( um )
 	"<div style='background:white;overflow:auto;'>"..
 		"<h1>Welcome to Naval Warfare 1.1</h1>"..
 		"<p>"..
+			"BE DOUBLE SURE TO READ THIS, IT IS HARD TO SYMPETHISE WHEN SOMEBODY ASKES FOR INFORMATION THAT IS RIGHT HERE<br />"..
+			"!motd to read againm, !rules to read the rules again.<br />"..
+			"<br />"..
 			"This is a free to play/host version of a gamemode called \"Naval Play\"<br />"..
 			"<br />"..
 			"Objective:<br />"..
@@ -127,8 +130,7 @@ function DrawMOTD( um )
 			"Beware, the other team will try to take the platform from you.<br /><br />"..
 
 			"Copperhead Island:<br />"..
-			"Holding control of this island will boost your team's periodic income.<br />"..
-			"This feature may be removed in the beta.<br /><br />"..
+			"Pirates spawn here, but beware, pirates can only gain money by destroying other peoples ships in the water!<br />"..
 
 			"Your Harbor:<br />"..
 			"Upon joining a team you will be assigned a Harbor.<br />"..
