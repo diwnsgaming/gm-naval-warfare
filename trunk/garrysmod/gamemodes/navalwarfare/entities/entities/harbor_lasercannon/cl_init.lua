@@ -7,8 +7,8 @@ function ENT:Draw()
 		local ang = self:GetAngles()
 		
 		local tracedata = {}
-		tracedata.start = pos
-		tracedata.endpos = pos + (self:GetUp()*800)
+		tracedata.start = pos + self:GetUp()*300
+		tracedata.endpos = pos + (self:GetUp()*5000)
 		tracedata.filter = self
 		
 		local trace = util.TraceLine(tracedata)
@@ -20,7 +20,7 @@ function ENT:Draw()
 			render.DrawBeam(StartPos, EndPos, 200, 1, 1, Color(255,255,255,255))
 		else
 			local StartPos = self:GetPos()
-			local EndPos   = pos + (self:GetUp()*800)
+			local EndPos   = pos + (self:GetUp()*5000)
 			render.SetMaterial(Laser)
 			render.DrawBeam(StartPos, EndPos, 200, 1, 1, Color(255,255,255,255))
 		end

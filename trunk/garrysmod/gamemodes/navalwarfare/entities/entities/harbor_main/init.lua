@@ -18,6 +18,7 @@ end
 
 function ENT:Initialize()
 	self:SetModel( "models/props_pipes/pipe03_connector01.mdl" )
+	self:SetMaterial("Models/effects/vol_light001")
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )

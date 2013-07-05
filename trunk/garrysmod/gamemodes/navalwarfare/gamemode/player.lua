@@ -467,7 +467,7 @@ local SENTWHITELIST = { --can contain partials
 }
 
 function GM:PlayerSpawnedSENT( ply, ent )
-if ent.NWHealth == nil then ent.NWHealth = ent:GetPhysicsObject():GetVolume()/100 end
+	
 	local isWhitelist = ply.adminMode
 	local class = ent:GetClass()
 	if not isWhitelist then
@@ -525,6 +525,7 @@ if ent.NWHealth == nil then ent.NWHealth = ent:GetPhysicsObject():GetVolume()/10
 		ent.couldSpawn = true
 		ply:AddCount( "sents", ent )
 	end
+	if ent!=nil and ent.NWHealth == nil then ent.NWHealth = ent:GetPhysicsObject():GetVolume()/100 end
 end
 
 --[[---------------------------------------------------------

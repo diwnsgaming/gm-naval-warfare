@@ -1,7 +1,7 @@
 "navalwarfare"
 {
 	"base"		"base"
-	"title"		"Naval Warfare 1.0"
+	"title"		"Naval Warfare 2.0"
 	"maps"		"^acf_|^ACF_"
 	"menusystem"	"1"
 	

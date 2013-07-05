@@ -2,6 +2,8 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( "shared.lua" )
 --
+localself = nil
+
 function ENT:SpawnFunction( ply, tr )
 	if ( !tr.Hit ) then return end
 	local SpawnPos = tr.HitPos + tr.HitNormal * 1 + Vector( 0, 0, 20)
@@ -12,8 +14,17 @@ function ENT:SpawnFunction( ply, tr )
 	return ent
 end
 
+
+local function RemoveSelf()
+	local localerself = localself
+	if(localerself:IsValid()) then
+		localerself:Remove()
+	end
+end
+ 
+
 function ENT:Initialize()
-	self:SetModel("models/munitions/round_100mm_shot.mdl")
+	self:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )
 	self:SetSolid( SOLID_VPHYSICS )
@@ -21,10 +32,12 @@ function ENT:Initialize()
 	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
-		phys:SetMass(500)
+		phys:SetMass(100)
 	end
-	self:SetOverlayText("203mm")
-	self.Scale = 1
+	self:SetOverlayText("cannonball")
+	self.Scale = 2.3
+	localself = self
+	timer.Simple( 10, RemoveSelf )
 end
 
 function ENT:PhysicsCollide( data, physobj )

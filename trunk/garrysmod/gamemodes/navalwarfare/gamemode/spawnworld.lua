@@ -1,3 +1,8 @@
+local ussrspawn = nil
+local usaspawn = nil
+local mainharbor = nil
+local oilt = nil
+local check = false
 
 function SpawnEntity(class, model, pos, angle)
 	local ent = ents.Create(class) -- This creates our zombie entity
@@ -12,16 +17,37 @@ function SpawnEntity(class, model, pos, angle)
 	end
 	return ent
 end
+ 
+local NextPrintTime = 0
+function HarborSecondPrint()
+	if(check && CurTime() >= NextPrintTime) then
+		if(ussrspawn==nil) then
+			ussrspawn = SpawnEntity("harbor_ussrspawn", "models/hunter/blocks/cube2x3x025.mdl", Vector(4200, -4200, 5950), Angle(0,45,90))
+		end
+		if(usaspawn==nil)then
+			usaspawn = SpawnEntity("harbor_usaspawn", "models/hunter/blocks/cube2x3x025.mdl", Vector(4500, -4500, 5950), Angle(0,45,90))
+		end
+		if(mainharbor==nil)then
+			mainharbor = SpawnEntity("harbor_main", "models/props_pipes/pipe03_connector01.mdl", Vector(9216.722656, 9215.520508, 2064.031250), Angle(0,0,0)) -- Oil Rig Plugs and Main
+		end
+		if(oilt==nil)then
+			oilt = SpawnEntity("harbor_oiltransfer", "models/props_lab/tpplugholder_single.mdl", Vector(0,0,0), Angle(0,0,0))
+		end
+		NextPrintTime = CurTime() + 5
+	end
+end
+hook.Add("Think", "HarborSecondPrint", HarborSecondPrint)
+
 function Init_SpawnEntities()
 	
 	--SpawnRoom entities
-	local ussr = SpawnEntity("harbor_ussrspawn", "models/hunter/blocks/cube2x3x025.mdl", Vector(4200, -4200, 5950), Angle(0,45,90)):SetMaterial("Models/effects/vol_light001")
-	local usa = SpawnEntity("harbor_usaspawn", "models/hunter/blocks/cube2x3x025.mdl", Vector(4500, -4500, 5950), Angle(0,45,90)):SetMaterial("Models/effects/vol_light001")
+	ussrspawn = SpawnEntity("harbor_ussrspawn", "models/hunter/blocks/cube2x3x025.mdl", Vector(4200, -4200, 5950), Angle(0,45,90))
+	usaspawn = SpawnEntity("harbor_usaspawn", "models/hunter/blocks/cube2x3x025.mdl", Vector(4500, -4500, 5950), Angle(0,45,90))
 	--NADMOD.SetOwnerWorld(ussr)
 	--NADMOD.SetOwnerWorld(usa)
 	--other
-	SpawnEntity("harbor_main", "models/props_pipes/pipe03_connector01.mdl", Vector(9216.722656, 9215.520508, 2064.031250), Angle(0,0,0)):SetMaterial("Models/effects/vol_light001") -- Oil Rig Plugs and Main
-	SpawnEntity("harbor_oiltransfer", "models/props_lab/tpplugholder_single.mdl", Vector(0,0,0), Angle(0,0,0))
+	mainharbor = SpawnEntity("harbor_main", "models/props_pipes/pipe03_connector01.mdl", Vector(9216.722656, 9215.520508, 2064.031250), Angle(0,0,0))
+	oilt = SpawnEntity("harbor_oiltransfer", "models/props_lab/tpplugholder_single.mdl", Vector(0,0,0), Angle(0,0,0))
 	
 	--npcs
 		--USSR
@@ -35,6 +61,8 @@ function Init_SpawnEntities()
 		NPC_UPGRADES = SpawnEntity("harbor_npc_upgrades", "", Vector(15612, -15142,3), Angle(0,90,0))
 		SpawnEntity("harbor_npc_gunshop", "", Vector(15706, -15101,3), Angle(0,90,0))
 		SpawnEntity("harbor_npc_ammoshop", "", Vector(15797, -15099,3), Angle(0,90,0))
+		
+	check = true
 		
 end
 local function Init_Delay() --fucking weird shit to make gravity hull designator not crash the server
